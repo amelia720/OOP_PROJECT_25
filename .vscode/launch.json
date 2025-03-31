@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "RUN_CODE_HERE",
+      "request": "launch",
+      "mainClass": "amelia.RUN_CODE_HERE",
+      "projectName": "OOP_PROJECT_25_c816fb56"
+    },
+    {
+      "type": "java",
+      "name": "Driver",
+      "request": "launch",
+      "mainClass": "amelia.Driver",
+      "projectName": "OOP_PROJECT_25_c816fb56"
+    },
+    {
+      "type": "java",
+      "name": "Run Driver",
+      "request": "launch",
+      "mainClass": "amelia.Driver",
+      "projectName": "OOP_PROJECT_25",
+      "classPaths": [
+        "lib/mysql-connector-j-9.2.0.jar"
+      ]
+    }
+  ]
+}
