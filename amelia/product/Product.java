@@ -18,6 +18,8 @@ public class Product
         setStock(stock);  // Using setter for validation
     }
 
+    public Product() {}
+
     // Getters
     public int getProductId() 
     {
@@ -64,27 +66,39 @@ public class Product
     {
         if (price >= 0) {
             this.price = price;
-        } else {
+        } 
+        else 
+        {
             throw new IllegalArgumentException("Price cannot be negative");
         }
     }
 
     public void setStock(int stock) 
     {
-        if (stock >= 0) {
+        if (stock >= 0) 
+        {
             this.stock = stock;
-        } else {
+        } 
+        else 
+        {
             throw new IllegalArgumentException("Stock quantity cannot be negative");
         }
     }
 
     // Display Product Details
-    public void displayProduct() 
+    public void displayProductInfo() 
     {
         System.out.println("Product ID: " + productId);
         System.out.println("Product Name: " + name);
         System.out.println("Category: " + category);
         System.out.println("Price: $" + price);
         System.out.println("Stock Quantity: " + stock);
+    }
+    public static String[] getCategoryOptions() 
+    {
+        return new String[] 
+        {
+            "Electronics", "Clothing", "Books", "Home", "Sports", "Food", "Other"
+        };
     }
 }

@@ -73,7 +73,7 @@ public class DeleteCustomerPanel extends JPanel
         // Bottom Panel UI   //
         ///////////////////////
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(deleteButton);
         buttonPanel.add(messageLabel);
 

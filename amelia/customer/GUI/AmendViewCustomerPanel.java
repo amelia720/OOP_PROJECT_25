@@ -66,7 +66,7 @@ public class AmendViewCustomerPanel extends CustomerPanel
         formPanel.add(new JLabel("Email:")); formPanel.add(emailField);
         formPanel.add(new JLabel("Phone:")); formPanel.add(phoneField);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.add(updateButton);
         buttonPanel.add(messageLabel);
 
