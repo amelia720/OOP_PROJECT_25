@@ -13,15 +13,6 @@ CREATE TABLE Customer
     phone CHAR(10) NOT NULL
 );
 
-CREATE TABLE Invoice 
-(
-    invoiceId INT AUTO_INCREMENT PRIMARY KEY,
-    customerId INT NOT NULL,
-    totalAmount DECIMAL(10, 2) NOT NULL,
-    invoiceDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customerId) REFERENCES Customer(customerId)
-);
-
 CREATE TABLE Product 
 (
     productId INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,4 +20,24 @@ CREATE TABLE Product
     category VARCHAR(50),
     price DECIMAL(10, 2) NOT NULL,
     stock INT NOT NULL
+);
+
+CREATE TABLE Invoice 
+(
+    invoiceId INT AUTO_INCREMENT PRIMARY KEY,
+    customerId INT NOT NULL,
+    invoiceDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (customerId) REFERENCES Customer(customerId)
+);
+
+CREATE TABLE InvoiceItem 
+(
+    invoiceId INT NOT NULL,
+    productId INT NOT NULL, 
+    unitPrice DECIMAL(10, 2) NOT NULL,
+    quantity INT NOT NULL,
+    totalAmount DECIMAL(10, 2) GENERATED ALWAYS AS (unitPrice * quantity) STORED,
+    PRIMARY KEY (invoiceId, productId),
+    FOREIGN KEY (invoiceId) REFERENCES Invoice(invoiceId),
+    FOREIGN KEY (productId) REFERENCES Product(productId)
 );

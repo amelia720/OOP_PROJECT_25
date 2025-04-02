@@ -101,4 +101,9 @@ public class Product
             "Electronics", "Clothing", "Books", "Home", "Sports", "Food", "Other"
         };
     }
+
+    @Override
+    public String toString() {
+        return name + " (" + category + ") - €" + String.format("%.2f", price);
+    }
 }

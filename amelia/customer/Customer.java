@@ -134,4 +134,10 @@ public class Customer
         System.out.println("Email: " + email);
         System.out.println("Phone: " + phone);
     }
+
+    @Override
+    public String toString() {
+        return fname + " " + sname + " (" + email + ")";
+    }
+
 }

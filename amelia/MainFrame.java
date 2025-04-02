@@ -7,9 +7,9 @@ import amelia.customer.GUI.AmendViewCustomerPanel;
 import amelia.product.GUI.AddProductPanel;
 import amelia.product.GUI.AmendViewProductPanel;
 import amelia.product.GUI.DeleteProductPanel;
-import amelia.invoice.AddInvoicePanel;
-import amelia.invoice.DeleteInvoicePanel;
-import amelia.invoice.AmendViewInvoicePanel;
+import amelia.invoice.GUI.AddInvoicePanel;
+import amelia.invoice.GUI.AmendViewInvoicePanel;
+import amelia.invoice.GUI.DeleteInvoicePanel;
 
 import java.awt.*;
 import java.util.ArrayList;
