@@ -10,14 +10,18 @@ public class Invoice {
     private Customer customer;
     private List<InvoiceItem> items;
 
+    // ✅ Just store the totalAmount
+    private double totalAmount;
+
     // Constructors
     public Invoice() {}
 
-    public Invoice(int invoiceId, LocalDateTime invoiceDate, Customer customer, List<InvoiceItem> items) {
+    public Invoice(int invoiceId, LocalDateTime invoiceDate, Customer customer, List<InvoiceItem> items, double totalAmount) {
         this.invoiceId = invoiceId;
         this.invoiceDate = invoiceDate;
         this.customer = customer;
         this.items = items;
+        this.totalAmount = totalAmount;
     }
 
     // Getters
@@ -37,6 +41,10 @@ public class Invoice {
         return items;
     }
 
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+
     // Setters
     public void setInvoiceId(int invoiceId) {
         this.invoiceId = invoiceId;
@@ -54,12 +62,11 @@ public class Invoice {
         this.items = items;
     }
 
-    // Get total amount
-    public double getTotalAmount() {
-        return items.stream().mapToDouble(InvoiceItem::getTotalAmount).sum();
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
-    // Display the invoice
+    // Display
     public void displayInvoice() {
         System.out.println("======================================");
         System.out.println("           INVOICE #" + invoiceId);
@@ -69,11 +76,13 @@ public class Invoice {
         customer.displayCustomerInfo();
 
         System.out.println("\nItems:");
-        for (InvoiceItem item : items) {
-            System.out.println(" - " + item);
+        if (items != null) {
+            for (InvoiceItem item : items) {
+                System.out.println(" - " + item);
+            }
         }
 
-        System.out.printf("\nTOTAL AMOUNT: €%.2f%n", getTotalAmount());
+        System.out.printf("\nTOTAL AMOUNT: €%.2f%n", totalAmount);
         System.out.println("======================================\n");
     }
 }

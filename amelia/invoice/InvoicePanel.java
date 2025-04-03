@@ -43,7 +43,24 @@ public class InvoicePanel extends JPanel {
                 Product product = (Product) productBox.getSelectedItem();
                 int quantity = Integer.parseInt(quantityField.getText());
 
-                if (quantity <= 0) {
+                if (quantity <= 0) 
+                {
+                    JOptionPane.showMessageDialog(this, "Quantity must be greater than 0.");
+                    return;
+                }
+
+                if (quantity > product.getStock()) 
+                {
+                    JOptionPane.showMessageDialog(this,
+                        "Cannot add more than available stock (" + product.getStock() + " in stock).",
+                        "Stock Limit",
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
+
+                if (quantity <= 0) 
+                {
                     JOptionPane.showMessageDialog(this, "Quantity must be greater than 0.");
                     return;
                 }
