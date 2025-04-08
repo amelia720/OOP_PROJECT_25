@@ -7,19 +7,38 @@ import amelia.MyConnection;
 import amelia.customer.Customer;
 import amelia.customer.CustomerDAO;
 
-public class InsertCustomer {
+/**
+ * This class lets the user add a new customer using the command line.
+ */
+public class InsertCustomer 
+{
 
-    public static void main(String[] args) {
-        insertCust(); // CLI entry point
+    /**
+     * Main method that starts the insert customer process.
+     */
+    public static void main(String[] args) 
+    {
+        insertCust(); // Start the insert customer process
     }
 
-    public static void insertCust() {
+    /**
+     * Collects user input and inserts a new customer into the database.
+     */
+    public static void insertCust() 
+    {
+        // Create a Scanner to get input from the user
         Scanner input = new Scanner(System.in);
+
+        // Create a database connection (will be used later)
         Connection conn = null;
 
-        try {
+        // Try block for main logic
+        try 
+        {
+            // Create a new Customer object to hold the user's input
             Customer customer = new Customer();
 
+            // Ask the user for customer details
             System.out.print("Enter first name: ");
             customer.setFname(input.nextLine());
 
@@ -29,42 +48,65 @@ public class InsertCustomer {
             System.out.print("Enter address: ");
             customer.setAddress(input.nextLine());
 
-            // Email validation loop
-            while (true) {
-                try {
+            // Loop until a valid email is entered
+            while (true) 
+            {
+                try 
+                {
                     System.out.print("Enter email: ");
-                    customer.setEmail(input.nextLine());
-                    break;
-                } catch (IllegalArgumentException e) {
+                    customer.setEmail(input.nextLine()); // May throw IllegalArgumentException
+                    break; // Exit loop if valid
+                } 
+                catch (IllegalArgumentException e) 
+                {
                     System.out.println("Validation Error: " + e.getMessage());
                 }
             }
 
-            // Phone validation loop
-            while (true) {
-                try {
+            // Loop until a valid phone number is entered
+            while (true) 
+            {
+                try 
+                {
                     System.out.print("Enter phone (10 digits): ");
-                    customer.setPhone(input.nextLine());
-                    break;
-                } catch (IllegalArgumentException e) {
+                    customer.setPhone(input.nextLine()); // May throw IllegalArgumentException
+                    break; // Exit loop if valid
+                } 
+                catch (IllegalArgumentException e) 
+                {
                     System.out.println("Error: " + e.getMessage());
                 }
             }
 
-            // Get DB connection and insert
+            // Connect to the database
             conn = MyConnection.getConnection();
+
+            // Insert the new customer into the database using the DAO
             CustomerDAO.insertCustomer(conn, customer);
 
+            // Let the user know it worked
             System.out.println("Customer added successfully.");
 
-        } catch (Exception e) {
+        } 
+        // Catch any unexpected errors
+        catch (Exception e) 
+        {
             System.out.println("Error: " + e.getMessage());
-        } finally {
-            try {
+        } 
+        // This block always runs, even if there's an error
+        finally 
+        {
+            try 
+            {
+                // Close the database connection
                 if (conn != null) conn.close();
-            } catch (Exception e) {
+            } 
+            catch (Exception e) 
+            {
                 System.out.println("⚠️ Failed to close connection: " + e.getMessage());
             }
+
+            // Close the scanner to free up system resources
             input.close();
         }
     }

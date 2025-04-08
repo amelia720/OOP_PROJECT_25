@@ -7,56 +7,62 @@ import java.sql.SQLException;
 
 import amelia.MyConnection;
 
-// Class responsible for displaying all customers from the database
+/**
+ * Class responsible for displaying all customers from the database.
+ */
 public class ViewCustomer 
 {
-    // Method to display all customer records
+    /**
+     * Displays all customer records from the database.
+     */
     public static void viewAllCustomers() 
     {
-        // Connection object used to connect to the database
+        // Declare connection outside try so it's accessible in finally
         Connection connection = null;
 
         try 
         {
-            // Establish database connection
+            // Get connection to the database using MyConnection helper class
             connection = MyConnection.getConnection();
 
-            // Prepare SQL statement to select all customer data
+            // Prepare SQL query to fetch all customer details
             PreparedStatement stmt = connection.prepareStatement(
                 "SELECT customerId, fname, sname, address, email, phone FROM Customer"
             );
 
-            // Execute the query and store results
+            // Execute the query and store results in a ResultSet
             ResultSet result = stmt.executeQuery();
 
+            // Print header
             System.out.println("===== All Customers =====");
 
-            // Loop through the result set and display each customer
+            // Loop through each customer in the result set and print their info
             while (result.next()) 
             {
                 System.out.println("-----------------------------------");
-                System.out.println("ID:      " + result.getInt("customerId"));
-                System.out.println("Name:    " + result.getString("fname") + " " + result.getString("sname"));
-                System.out.println("Address: " + result.getString("address"));
-                System.out.println("Email:   " + result.getString("email"));
-                System.out.println("Phone:   " + result.getString("phone"));
+                System.out.println("ID:      " + result.getInt("customerId")); // Get ID from column
+                System.out.println("Name:    " + result.getString("fname") + " " + result.getString("sname")); // Full name
+                System.out.println("Address: " + result.getString("address")); // Address
+                System.out.println("Email:   " + result.getString("email")); // Email
+                System.out.println("Phone:   " + result.getString("phone")); // Phone
             }
 
         } 
         catch (SQLException e) 
         {
-            // Handle any SQL-related exceptions
+            // If something goes wrong with the SQL or DB, print the error
             System.out.println("Error retrieving customer data: " + e.getMessage());
         } 
         finally 
         {
-            // Always attempt to close the connection if it was opened
+            // This block runs no matter what — used to safely close the connection
             try 
             {
-                if (connection != null) connection.close();
+                if (connection != null) connection.close(); // Always close the connection to free resources
             } 
             catch (SQLException e) 
             {
+                // If closing the connection fails, print error
                 System.out.println("Error closing database connection: " + e.getMessage());
             }
         }

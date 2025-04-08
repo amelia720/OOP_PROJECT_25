@@ -1,5 +1,9 @@
 package amelia.customer;
 
+/**
+ * This class represents a customer in the system.
+ * It stores their name, contact details, and a unique ID.
+ */
 public class Customer 
 {
     private int customerId; // Unique ID for each customer
@@ -9,15 +13,15 @@ public class Customer
     private String email;
     private String phone;
 
-    // Constructor with required attributes
     /**
-     * 
-     * @param customerId - Customer Id
-     * @param fname - First Name
-     * @param sname - Surname
-     * @param address - Address
-     * @param email - Email
-     * @param phone - Phone
+     * This constructor is used when I want to create a customer with all their details straight away.
+     *
+     * @param customerId the customer's unique ID
+     * @param fname the customer's first name
+     * @param sname the customer's surname
+     * @param address the customer's home address
+     * @param email the customer's email address (validated)
+     * @param phone the customer's phone number (validated)
      */
     public Customer(int customerId, String fname, String sname, String address, String email, String phone) 
     {
@@ -25,79 +29,109 @@ public class Customer
         this.fname = fname;
         this.sname = sname;
         this.address = address;
-        setEmail(email);  // Using setter for validation
-        setPhone(phone);  // Using setter for validation
-    }
-
-    // Default constructor
-    public Customer() {}
-
-    // Getters
-    public int getCustomerId() {
-        return customerId;
-    }
-
-    public String getFname() {
-        return fname;
-    }
-
-    public String getSname() {
-        return sname;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPhone() {
-        return phone;
+        setEmail(email);  // Use setter so it gets validated
+        setPhone(phone);  // Use setter so it gets validated
     }
 
     /**
-     * 
-     * @param customerId - Customer Id to Set
+     * This is the default constructor (in case I want to set the values later).
      */
-    // Setters
-    public void setCustomerId(int customerId) {
+    public Customer() {}
+
+    // ======= Getters =======
+
+    /**
+     * @return the customer's ID
+     */
+    public int getCustomerId() 
+    {
+        return customerId;
+    }
+
+    /**
+     * @return the customer's first name
+     */
+    public String getFname() 
+    {
+        return fname;
+    }
+
+    /**
+     * @return the customer's surname
+     */
+    public String getSname() 
+    {
+        return sname;
+    }
+
+    /**
+     * @return the customer's address
+     */
+    public String getAddress() 
+    {
+        return address;
+    }
+
+    /**
+     * @return the customer's email
+     */
+    public String getEmail() 
+    {
+        return email;
+    }
+
+    /**
+     * @return the customer's phone number
+     */
+    public String getPhone() 
+    {
+        return phone;
+    }
+
+    // ======= Setters =======
+
+    /**
+     * @param customerId sets the customer's ID
+     */
+    public void setCustomerId(int customerId) 
+    {
         this.customerId = customerId;
     }
 
     /**
-     * 
-     * @param fname - First Name to Set
+     * @param fname sets the customer's first name
      */
-    public void setFname(String fname) {
+    public void setFname(String fname) 
+    {
         this.fname = fname;
     }
 
     /**
-     * 
-     * @param sname - suraname to set
+     * @param sname sets the customer's surname
      */
-    public void setSname(String sname) {
+    public void setSname(String sname) 
+    {
         this.sname = sname;
     }
+
     /**
-     * 
-     * @param address - name to set
+     * @param address sets the customer's address
      */
-    public void setAddress(String address) {
+    public void setAddress(String address) 
+    {
         this.address = address;
     }
 
     /**
-     * Sets the email address after validating the format.
-     * @param email - email validation
+     * Sets the customer's email, but also checks if it's a valid format.
+     *
+     * @param email the customer's email to set
+     * @throws IllegalArgumentException if the email is not in the right format
      */
     public void setEmail(String email) 
     {
         if (email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) 
         {
-            // Enhanced email validation
             this.email = email;
         } 
         else 
@@ -105,26 +139,27 @@ public class Customer
             throw new IllegalArgumentException("Invalid email format");
         }
     }
+
     /**
-     * Sets the phone number after validating it is 10 digits.
-     * @param phone - Phone Validation
+     * Sets the customer's phone number, but makes sure it's exactly 10 digits.
+     *
+     * @param phone the customer's phone number
+     * @throws IllegalArgumentException if the phone number isn't 10 digits
      */
     public void setPhone(String phone) 
     {
         if (phone.matches("\\d{10}")) 
         {
-             // 10-digit number validation
             this.phone = phone;
         } 
-        else {
-
+        else 
+        {
             throw new IllegalArgumentException("Invalid phone number format. Must be 10 digits.");
         }
     }
 
-    // Display customer details
     /**
-     * Displays all customer details in a formatted output.
+     * Prints out all the customer’s details in the console.
      */
     public void displayCustomerInfo() 
     {
@@ -135,9 +170,14 @@ public class Customer
         System.out.println("Phone: " + phone);
     }
 
+    /**
+     * Returns a simple string showing the customer's name and email.
+     *
+     * @return formatted string for displaying customer
+     */
     @Override
-    public String toString() {
+    public String toString() 
+    {
         return fname + " " + sname + " (" + email + ")";
     }
-
 }

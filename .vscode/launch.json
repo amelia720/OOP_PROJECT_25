@@ -3,6 +3,27 @@
   "configurations": [
     {
       "type": "java",
+      "name": "EditCustomer",
+      "request": "launch",
+      "mainClass": "amelia.customer.CLI.EditCustomer",
+      "projectName": "OOP_PROJECT_25_c816fb56"
+    },
+    {
+      "type": "java",
+      "name": "DeleteCustomer",
+      "request": "launch",
+      "mainClass": "amelia.customer.CLI.DeleteCustomer",
+      "projectName": "OOP_PROJECT_25_c816fb56"
+    },
+    {
+      "type": "java",
+      "name": "InsertCustomer",
+      "request": "launch",
+      "mainClass": "amelia.customer.CLI.InsertCustomer",
+      "projectName": "OOP_PROJECT_25_c816fb56"
+    },
+    {
+      "type": "java",
       "name": "RUN_CODE_HERE",
       "request": "launch",
       "mainClass": "amelia.RUN_CODE_HERE",

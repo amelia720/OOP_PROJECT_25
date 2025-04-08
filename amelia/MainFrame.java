@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
     private final ArrayList<JButton> allButtons = new ArrayList<>();
     private JButton currentMainButton = null;
     private JButton currentSubButton = null;
-    private final ProjectInfo projectInfo = new ProjectInfo();
+    private final HomePage projectInfo = new HomePage();
 
     public MainFrame() {
         setTitle("ShopManager Pro");

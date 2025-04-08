@@ -5,8 +5,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CustomerDAO {
+/**
+ * Customer DAO ( Data Access Object ):
+ * > handles database operations for Customer objects.
+ * > It includes methods to insert, update, delete, and retrieve customer data from it's table.
+ */
+public class CustomerDAO 
+{
 
+    /**
+     * Inserts a new customer into the Customer table.
+     *
+     * @param conn The database connection to use.
+     * @param customer The customer object containing the data to insert.
+     * @throws SQLException If there's a problem with the SQL operation.
+     */
     public static void insertCustomer(Connection conn, Customer customer) throws SQLException 
     {
         PreparedStatement pstat = conn.prepareStatement(
@@ -20,6 +33,14 @@ public class CustomerDAO {
         pstat.executeUpdate();
     }
 
+    /**
+     * Updates an existing customer's details in the Customer table.
+     *
+     * @param conn The database connection to use.
+     * @param customer The customer object with the updated data (including customerId).
+     * @return The number of rows that were updated.
+     * @throws SQLException If there's a problem with the SQL operation.
+     */
     public static int updateCustomer(Connection conn, Customer customer) throws SQLException 
     {
         PreparedStatement pstat = conn.prepareStatement(
@@ -34,19 +55,36 @@ public class CustomerDAO {
         return pstat.executeUpdate();
     }
 
-    public static int deleteCustomer(Connection conn, int customerId) throws SQLException {
+    /**
+     * Deletes a customer from the Customer table based on their customer ID.
+     *
+     * @param conn The database connection to use.
+     * @param customerId The ID of the customer to delete.
+     * @return The number of rows that were deleted.
+     * @throws SQLException If there's a problem with the SQL operation.
+     */
+    public static int deleteCustomer(Connection conn, int customerId) throws SQLException 
+    {
         PreparedStatement pstat = conn.prepareStatement(
             "DELETE FROM Customer WHERE customerId = ?"
         );
         pstat.setInt(1, customerId);
         return pstat.executeUpdate();
     }
-    
-    public static ResultSet getAllCustomers(Connection conn) throws SQLException {
+
+    /**
+     * Retrieves all customers from the Customer table.
+     *
+     * @param conn The database connection to use.
+     * @return A ResultSet containing all customer records.
+     * @throws SQLException If there's a problem with the SQL operation.
+     */
+    public static ResultSet getAllCustomers(Connection conn) throws SQLException 
+    {
         PreparedStatement stmt = conn.prepareStatement(
             "SELECT customerId, fname, sname, address, email, phone FROM Customer"
         );
         return stmt.executeQuery();
     }
-    
+
 }

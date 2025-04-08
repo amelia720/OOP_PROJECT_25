@@ -24,7 +24,7 @@ public class ViewInvoiceTable {
             INNER JOIN Customer c ON i.customerId = c.customerId
             INNER JOIN InvoiceItem ii ON i.invoiceId = ii.invoiceId
             GROUP BY i.invoiceId
-            ORDER BY i.invoiceDate DESC
+            ORDER BY i.invoiceId ASC
         """;
 
         try (Connection conn = MyConnection.getConnection();

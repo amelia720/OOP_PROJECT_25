@@ -3,42 +3,57 @@ package amelia.invoice;
 import amelia.customer.Customer;
 import amelia.product.Product;
 
-import java.sql.*;
-import java.time.LocalDateTime;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class InvoiceDAO {
+public class InvoiceDAO 
+{
     private Connection conn;
 
-    public InvoiceDAO(Connection conn) {
+    public InvoiceDAO(Connection conn) 
+    {
         this.conn = conn;
     }
 
     // 1. Create invoice (returns generated invoiceId)
-    public int createInvoice(int customerId) throws SQLException {
+    public int createInvoice(int customerId) throws SQLException 
+    {
         String sql = "INSERT INTO Invoice (customerId) VALUES (?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) 
+        {
             stmt.setInt(1, customerId);
             stmt.executeUpdate();
 
-            try (ResultSet rs = stmt.getGeneratedKeys()) {
-                if (rs.next()) {
-                    return rs.getInt(1);
+            try (ResultSet rs = stmt.getGeneratedKeys()) 
+            {
+                if (rs.next()) 
+                {
+                    return rs.getInt(1); // Return the generated invoice ID
                 }
             }
         }
-        return -1;
+        return -1; // Something went wrong
     }
 
     // 2. Add a product to the invoice with stock check
-    public void addInvoiceItem(int invoiceId, int productId, double unitPrice, int quantity) throws SQLException {
-        if (!updateStock(productId, quantity)) {
+    public void addInvoiceItem(int invoiceId, int productId, double unitPrice, int quantity) throws SQLException 
+    {
+        // First check if there's enough stock
+        if (!updateStock(productId, quantity)) 
+        {
             throw new SQLException("Not enough stock for product ID " + productId);
         }
 
+        // Insert invoice item
         String sql = "INSERT INTO InvoiceItem (invoiceId, productId, unitPrice, quantity) VALUES (?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) 
+        {
             stmt.setInt(1, invoiceId);
             stmt.setInt(2, productId);
             stmt.setDouble(3, unitPrice);
@@ -48,30 +63,37 @@ public class InvoiceDAO {
     }
 
     // 3. Update stock during insert (if enough)
-    private boolean updateStock(int productId, int quantity) throws SQLException {
+    private boolean updateStock(int productId, int quantity) throws SQLException 
+    {
         String sql = "UPDATE Product SET stock = stock - ? WHERE productId = ? AND stock >= ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) 
+        {
             stmt.setInt(1, quantity);
             stmt.setInt(2, productId);
             stmt.setInt(3, quantity);
             int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
+            return rowsAffected > 0; // True if stock was updated
         }
     }
 
     // 4. Update quantity of invoice item + adjust stock accordingly
-    public boolean updateInvoiceItemQuantity(int invoiceId, int productId, int newQty) throws SQLException {
+    public boolean updateInvoiceItemQuantity(int invoiceId, int productId, int newQty) throws SQLException 
+    {
         // Step 1: Get current quantity
         String getQtySQL = "SELECT quantity FROM InvoiceItem WHERE invoiceId = ? AND productId = ?";
         int oldQty;
 
-        try (PreparedStatement getStmt = conn.prepareStatement(getQtySQL)) {
+        try (PreparedStatement getStmt = conn.prepareStatement(getQtySQL)) 
+        {
             getStmt.setInt(1, invoiceId);
             getStmt.setInt(2, productId);
             ResultSet rs = getStmt.executeQuery();
-            if (rs.next()) {
+            if (rs.next()) 
+            {
                 oldQty = rs.getInt("quantity");
-            } else {
+            } 
+            else 
+            {
                 throw new SQLException("Invoice item not found.");
             }
         }
@@ -79,14 +101,17 @@ public class InvoiceDAO {
         int difference = newQty - oldQty;
 
         // Step 2: Adjust stock
-        if (difference != 0) {
+        if (difference != 0) 
+        {
             String updateStockSQL = "UPDATE Product SET stock = stock - ? WHERE productId = ? AND stock >= ?";
-            try (PreparedStatement stockStmt = conn.prepareStatement(updateStockSQL)) {
+            try (PreparedStatement stockStmt = conn.prepareStatement(updateStockSQL)) 
+            {
                 stockStmt.setInt(1, difference);
                 stockStmt.setInt(2, productId);
-                stockStmt.setInt(3, difference > 0 ? difference : 0); // ensure only subtracts if needed
+                stockStmt.setInt(3, difference > 0 ? difference : 0); // only check stock if reducing
                 int affected = stockStmt.executeUpdate();
-                if (affected == 0) {
+                if (affected == 0) 
+                {
                     throw new SQLException("Not enough stock to apply the new quantity.");
                 }
             }
@@ -94,27 +119,31 @@ public class InvoiceDAO {
 
         // Step 3: Update quantity
         String updateQtySQL = "UPDATE InvoiceItem SET quantity = ? WHERE invoiceId = ? AND productId = ?";
-        try (PreparedStatement qtyStmt = conn.prepareStatement(updateQtySQL)) {
+        try (PreparedStatement qtyStmt = conn.prepareStatement(updateQtySQL)) 
+        {
             qtyStmt.setInt(1, newQty);
             qtyStmt.setInt(2, invoiceId);
             qtyStmt.setInt(3, productId);
             int updated = qtyStmt.executeUpdate();
-            return updated > 0;
+            return updated > 0; // True if quantity was updated
         }
     }
 
     // 5. Update invoice date
-    public static int updateInvoiceDate(Connection conn, int invoiceId, String newDate) throws SQLException {
+    public static int updateInvoiceDate(Connection conn, int invoiceId, String newDate) throws SQLException 
+    {
         String sql = "UPDATE Invoice SET invoiceDate = ? WHERE invoiceId = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) 
+        {
             stmt.setString(1, newDate); // format: yyyy-MM-dd HH:mm:ss
             stmt.setInt(2, invoiceId);
-            return stmt.executeUpdate();
+            return stmt.executeUpdate(); // Returns number of rows affected
         }
     }
 
     // 6. Get invoice with customer and items
-    public Invoice getInvoiceById(int invoiceId) throws SQLException {
+    public Invoice getInvoiceById(int invoiceId) throws SQLException 
+    {
         Invoice invoice = null;
         List<InvoiceItem> itemList = new ArrayList<>();
         Customer customer = null;
@@ -133,12 +162,15 @@ public class InvoiceDAO {
             WHERE i.invoiceId = ?
         """;
 
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) 
+        {
             stmt.setInt(1, invoiceId);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                if (invoice == null) {
+            while (rs.next()) 
+            {
+                if (invoice == null) 
+                {
                     invoice = new Invoice();
                     invoice.setInvoiceId(rs.getInt("invoiceId"));
                     invoice.setInvoiceDate(rs.getTimestamp("invoiceDate").toLocalDateTime());
@@ -154,6 +186,7 @@ public class InvoiceDAO {
                     invoice.setCustomer(customer);
                 }
 
+                // Create and add each item to list
                 InvoiceItem item = new InvoiceItem();
                 item.setProductId(rs.getInt("productId"));
                 item.setProductName(rs.getString("productName"));
@@ -166,15 +199,17 @@ public class InvoiceDAO {
             }
         }
 
-        if (invoice != null) {
-            invoice.setItems(itemList);
+        if (invoice != null) 
+        {
+            invoice.setItems(itemList); // Attach item list to invoice
         }
 
         return invoice;
     }
 
     // 7. Get all invoices for table view
-    public List<Invoice> getAllInvoices() throws SQLException {
+    public List<Invoice> getAllInvoices() throws SQLException 
+    {
         List<Invoice> invoices = new ArrayList<>();
 
         String sql = """
@@ -189,9 +224,11 @@ public class InvoiceDAO {
         """;
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             ResultSet rs = stmt.executeQuery()) 
+        {
 
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 Customer customer = new Customer(
                         rs.getInt("customerId"),
                         rs.getString("fname"),
@@ -205,7 +242,7 @@ public class InvoiceDAO {
                 invoice.setInvoiceId(rs.getInt("invoiceId"));
                 invoice.setInvoiceDate(rs.getTimestamp("invoiceDate").toLocalDateTime());
                 invoice.setCustomer(customer);
-                invoice.setItems(new ArrayList<>()); // empty list for now
+                invoice.setItems(new ArrayList<>()); // Empty list for now
                 invoice.setTotalAmount(rs.getDouble("total"));
 
                 invoices.add(invoice);
@@ -216,14 +253,17 @@ public class InvoiceDAO {
     }
 
     // 8. Get all customers
-    public List<Customer> getAllCustomers() throws SQLException {
+    public List<Customer> getAllCustomers() throws SQLException 
+    {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT * FROM Customer";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             ResultSet rs = stmt.executeQuery()) 
+        {
 
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 customers.add(new Customer(
                         rs.getInt("customerId"),
                         rs.getString("fname"),
@@ -239,14 +279,17 @@ public class InvoiceDAO {
     }
 
     // 9. Get all products
-    public List<Product> getAllProducts() throws SQLException {
+    public List<Product> getAllProducts() throws SQLException 
+    {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM Product";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             ResultSet rs = stmt.executeQuery()) 
+        {
 
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 products.add(new Product(
                         rs.getInt("productId"),
                         rs.getString("name"),
@@ -259,17 +302,8 @@ public class InvoiceDAO {
 
         return products;
     }
-    // public boolean deleteInvoiceItem(int invoiceId, int productId) throws SQLException 
-    // {
-    //     String sql = "DELETE FROM InvoiceItem WHERE invoiceId = ? AND productId = ?";
-    //     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-    //         stmt.setInt(1, invoiceId);
-    //         stmt.setInt(2, productId);
-    //         int deleted = stmt.executeUpdate();
-    //         return deleted > 0;
-    //     }
-    // }
 
+    // 10. Delete invoice item and restore stock
     public boolean deleteInvoiceItem(int invoiceId, int productId) throws SQLException 
     {
         String getQtySql = "SELECT quantity FROM InvoiceItem WHERE invoiceId = ? AND productId = ?";
@@ -280,7 +314,8 @@ public class InvoiceDAO {
             PreparedStatement getStmt = conn.prepareStatement(getQtySql);
             PreparedStatement deleteStmt = conn.prepareStatement(deleteSql);
             PreparedStatement restoreStmt = conn.prepareStatement(restoreStockSql)
-        ) {
+        ) 
+        {
             // Get quantity first
             getStmt.setInt(1, invoiceId);
             getStmt.setInt(2, productId);
@@ -302,7 +337,8 @@ public class InvoiceDAO {
             return true;
         }
     }
-    // InvoiceDAO.java
+
+    // 11. Delete entire invoice and its items
     public boolean deleteInvoiceWithItems(int invoiceId) throws SQLException {
         String deleteItemsSql = "DELETE FROM InvoiceItem WHERE invoiceId = ?";
         String deleteInvoiceSql = "DELETE FROM Invoice WHERE invoiceId = ?";
@@ -310,7 +346,8 @@ public class InvoiceDAO {
         try (
             PreparedStatement deleteItemsStmt = conn.prepareStatement(deleteItemsSql);
             PreparedStatement deleteInvoiceStmt = conn.prepareStatement(deleteInvoiceSql)
-        ) {
+        ) 
+        {
             // Delete associated items
             deleteItemsStmt.setInt(1, invoiceId);
             deleteItemsStmt.executeUpdate();
@@ -320,7 +357,5 @@ public class InvoiceDAO {
             int rows = deleteInvoiceStmt.executeUpdate();
             return rows > 0;
         }
-}
-
-    
+    }
 }

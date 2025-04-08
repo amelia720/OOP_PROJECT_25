@@ -1,6 +1,12 @@
 package amelia.invoice;
 
-public class InvoiceItem {
+/**
+ * Represents a single item in an invoice.
+ * Includes product info, quantity, unit price, and total amount.
+ */
+public class InvoiceItem 
+{
+    // Fields to store product and invoice item info
     private int productId;
     private String productName;
     private String category;
@@ -8,12 +14,13 @@ public class InvoiceItem {
     private int quantity;
     private double totalAmount;
 
-    // Default constructor
+    // Default constructor (needed for creating empty objects)
     public InvoiceItem() {}
 
-    // Full constructor
+    // Full constructor to initialize all fields and calculate total
     public InvoiceItem(int productId, String productName, String category,
-                       double unitPrice, int quantity) {
+                       double unitPrice, int quantity) 
+    {
         this.productId = productId;
         this.productName = productName;
         this.category = category;
@@ -22,65 +29,94 @@ public class InvoiceItem {
         this.totalAmount = unitPrice * quantity;
     }
 
-    // Getters
-    public int getProductId() {
+    /////////////////////////
+    // Getters (accessors) //
+    /////////////////////////
+
+    public int getProductId() 
+    {
         return productId;
     }
 
-    public String getProductName() {
+    public String getProductName() 
+    {
         return productName;
     }
 
-    public String getCategory() {
+    public String getCategory() 
+    {
         return category;
     }
 
-    public double getUnitPrice() {
+    public double getUnitPrice() 
+    {
         return unitPrice;
     }
 
-    public int getQuantity() {
+    public int getQuantity() 
+    {
         return quantity;
     }
 
-    public double getTotalAmount() {
+    public double getTotalAmount() 
+    {
         return totalAmount;
     }
 
-    // Setters
-    public void setProductId(int productId) {
+    /////////////////////////
+    // Setters (mutators)  //
+    /////////////////////////
+
+    public void setProductId(int productId) 
+    {
         this.productId = productId;
     }
 
-    public void setProductName(String productName) {
+    public void setProductName(String productName) 
+    {
         this.productName = productName;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(String category) 
+    {
         this.category = category;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    // Updates unit price and recalculates total
+    public void setUnitPrice(double unitPrice) 
+    {
         this.unitPrice = unitPrice;
         updateTotal();
     }
 
-    public void setQuantity(int quantity) {
+    // Updates quantity and recalculates total
+    public void setQuantity(int quantity) 
+    {
         this.quantity = quantity;
         updateTotal();
     }
 
-    public void setTotalAmount(double totalAmount) {
+    // Directly sets the total amount (used when loading from DB)
+    public void setTotalAmount(double totalAmount) 
+    {
         this.totalAmount = totalAmount;
     }
 
-    private void updateTotal() {
+    // Helper method to recalculate totalAmount when price or quantity changes
+    private void updateTotal() 
+    {
         this.totalAmount = this.unitPrice * this.quantity;
     }
 
-    // Display
+    /////////////////////
+    // Display Format  //
+    /////////////////////
+
+    // Returns a string like: "Laptop (Electronics) x2 @ €499.99 = €999.98"
+    // %s is string, %d is integer, %.2f is float with 2 decimal places
     @Override
-    public String toString() {
+    public String toString() 
+    {
         return String.format("%s (%s) x%d @ €%.2f = €%.2f",
             productName, category, quantity, unitPrice, totalAmount);
     }

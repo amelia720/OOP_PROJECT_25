@@ -2,25 +2,30 @@ package amelia.product;
 
 public class Product 
 {
+    // Fields to store product details
     private int productId;
     private String name;
     private String category;
     private double price;
     private int stock;
 
-    // Constructor
+    // Full constructor — used when we know all the product details
     public Product(int productId, String name, String category, double price, int stock) 
     {
         this.productId = productId;
         this.name = name;
         this.category = category;
-        setPrice(price);  // Using setter for validation
-        setStock(stock);  // Using setter for validation
+        setPrice(price);  // Use setter to apply validation
+        setStock(stock);  // Use setter to apply validation
     }
 
+    // Empty constructor — useful when creating a product before filling its fields
     public Product() {}
 
-    // Getters
+    ///////////////////
+    // Getter methods
+    ///////////////////
+
     public int getProductId() 
     {
         return productId;
@@ -46,7 +51,10 @@ public class Product
         return stock;
     }
 
-    // Setters
+    ///////////////////
+    // Setter methods
+    ///////////////////
+
     public void setProductId(int productId) 
     {
         this.productId = productId;
@@ -62,6 +70,7 @@ public class Product
         this.category = category;
     }
 
+    // Only allow non-negative prices
     public void setPrice(double price) 
     {
         if (price >= 0) {
@@ -73,6 +82,7 @@ public class Product
         }
     }
 
+    // Only allow non-negative stock
     public void setStock(int stock) 
     {
         if (stock >= 0) 
@@ -85,7 +95,10 @@ public class Product
         }
     }
 
-    // Display Product Details
+    /////////////////////////////////////
+    // Display method for CLI debugging
+    /////////////////////////////////////
+
     public void displayProductInfo() 
     {
         System.out.println("Product ID: " + productId);
@@ -94,6 +107,10 @@ public class Product
         System.out.println("Price: $" + price);
         System.out.println("Stock Quantity: " + stock);
     }
+
+    /////////////////////////////////////
+    // Returns category options for GUI
+    /////////////////////////////////////
     public static String[] getCategoryOptions() 
     {
         return new String[] 
@@ -102,6 +119,9 @@ public class Product
         };
     }
 
+    ///////////////////////////////
+    // Show product as a string
+    ///////////////////////////////
     @Override
     public String toString() {
         return name + " (" + category + ") - €" + String.format("%.2f", price);
