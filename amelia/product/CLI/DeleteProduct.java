@@ -79,4 +79,13 @@ public class DeleteProduct
             input.close();
         }
     }
+
+        
+    /**
+     * Main method to run the delete customer operation.
+     */
+    public static void main(String[] args) 
+    {
+        deleteProd(); // Start the deletion process
+    }
 }

@@ -139,4 +139,11 @@ public class EditProduct
             input.close();
         }
     }
+    /**
+     * Main method to run the delete customer operation.
+     */
+    public static void main(String[] args) 
+    {
+        editProd(); // Start the deletion process
+    }
 }

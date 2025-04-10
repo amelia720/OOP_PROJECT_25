@@ -7,110 +7,97 @@ import amelia.MyConnection;
 import amelia.product.Product;
 import amelia.product.ProductDAO;
 
-public class InsertProduct 
-{
-
-    // Main method to run the insert feature from the command line
-    public static void main(String[] args) 
-    {
-        insertProd(); // CLI entry point
-    }
+/**
+ * A CLI (Command Line Interface) class for inserting a new product into the database.
+ * <p>
+ * Prompts the user to enter product details, validates the input, and inserts
+ * the product record using the {@link ProductDAO}.
+ * </p>
+ */
+public class InsertProduct {
 
     /**
-     * Inserts a new product into the database by asking the user for input.
+     * Starts the product insertion process by prompting the user for:
+     * - Product name
+     * - Category
+     * - Price (validated as non-negative number)
+     * - Stock quantity (validated as non-negative integer)
+     * <p>
+     * Then it connects to the database and inserts the product.
+     * </p>
      */
-    public static void insertProd() 
-    {
+    public static void insertProd() {
         Scanner input = new Scanner(System.in); // For reading user input
         Connection conn = null; // Will hold the database connection
 
-        try 
-        {
+        try {
             // Create a Product object to hold user input
             Product product = new Product();
 
-            // Ask user for product name and category
+            // Ask user for product name
             System.out.print("Enter product name: ");
             product.setName(input.nextLine());
 
+            // Ask user for category
             System.out.print("Enter category: ");
             product.setCategory(input.nextLine());
 
-            // Price validation loop
-            while (true) 
-            {
-                try 
-                {
-                // Ask the user to enter a price for the product
-                System.out.print("Enter price: ");
-                
-                // Read input as text, convert it to a double
-                double price = Double.parseDouble(input.nextLine());
-
-                // Set the price in the Product object
-                // This will also run validation inside the setPrice() method
-                product.setPrice(price);
-
-                // If no error occurs, exit the loop
-                break;
-                } 
-                // This catches if the user types letters or symbols that can't be converted to a number
-                catch (NumberFormatException e) 
-                {
+            // Price input and validation
+            while (true) {
+                try {
+                    System.out.print("Enter price: ");
+                    double price = Double.parseDouble(input.nextLine());
+                    product.setPrice(price); // Setter does validation
+                    break;
+                } catch (NumberFormatException e) {
                     System.out.println("Invalid number. Please enter a valid price.");
-                } 
-                // This catches if the number is negative (based on validation in the setter)
-                catch (IllegalArgumentException e) 
-                {
+                } catch (IllegalArgumentException e) {
                     System.out.println("Validation Error: " + e.getMessage());
                 }
-
             }
 
-            // Stock quantity validation loop
-            while (true) 
-            {
-                try 
-                {
+            // Stock quantity input and validation
+            while (true) {
+                try {
                     System.out.print("Enter stock quantity: ");
                     int stock = Integer.parseInt(input.nextLine());
-                    product.setStock(stock); // Also validates inside setter
-                    break; // Exit loop if no error
-                } 
-                catch (NumberFormatException e) 
-                {
+                    product.setStock(stock); // Setter does validation
+                    break;
+                } catch (NumberFormatException e) {
                     System.out.println("Invalid number. Please enter a valid stock quantity.");
-                } 
-                catch (IllegalArgumentException e) 
-                {
+                } catch (IllegalArgumentException e) {
                     System.out.println("Validation Error: " + e.getMessage());
                 }
             }
 
-            // Get a database connection and insert product
+            // Insert product into the database
             conn = MyConnection.getConnection();
-            ProductDAO.insertProduct(conn, product); // Save to database
+            ProductDAO.insertProduct(conn, product);
 
-            System.out.println("Product added successfully."); // Success message
+            System.out.println("Product added successfully.");
 
-        } 
-        catch (Exception e) 
-        {
-            // Handle unexpected errors
+        } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
-        } 
-        finally 
-        {
-            // Always close the connection and scanner
-            try 
-            {
+        } finally {
+            // Cleanup: close DB connection and scanner
+            try {
                 if (conn != null) conn.close();
-            } 
-            catch (Exception e) 
-            {
+            } catch (Exception e) {
                 System.out.println("Failed to close connection: " + e.getMessage());
             }
-            input.close(); // Close scanner
+            input.close();
         }
+    }
+
+    /**
+     * Entry point for running this class.
+     * <p>
+     * Starts the product insertion workflow from the CLI.
+     * </p>
+     *
+     * @param args command-line arguments (not used)
+     */
+    public static void main(String[] args) {
+        insertProd(); // Launch the insertion process
     }
 }
