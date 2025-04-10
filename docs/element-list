@@ -1,0 +1,9 @@
+amelia
+amelia.customer
+amelia.customer.CLI
+amelia.customer.GUI
+amelia.invoice
+amelia.invoice.GUI
+amelia.product
+amelia.product.CLI
+amelia.product.GUI
