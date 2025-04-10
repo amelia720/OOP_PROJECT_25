@@ -41,25 +41,37 @@ public class InsertProduct
             {
                 try 
                 {
-                    System.out.print("Enter price: ");
-                    double price = Double.parseDouble(input.nextLine());
-                    product.setPrice(price); // Also validates inside setter
-                    break; // Exit loop if no error
+                // Ask the user to enter a price for the product
+                System.out.print("Enter price: ");
+                
+                // Read input as text, convert it to a double
+                double price = Double.parseDouble(input.nextLine());
+
+                // Set the price in the Product object
+                // This will also run validation inside the setPrice() method
+                product.setPrice(price);
+
+                // If no error occurs, exit the loop
+                break;
                 } 
+                // This catches if the user types letters or symbols that can't be converted to a number
                 catch (NumberFormatException e) 
                 {
                     System.out.println("Invalid number. Please enter a valid price.");
                 } 
+                // This catches if the number is negative (based on validation in the setter)
                 catch (IllegalArgumentException e) 
                 {
                     System.out.println("Validation Error: " + e.getMessage());
                 }
+
             }
 
             // Stock quantity validation loop
             while (true) 
             {
-                try {
+                try 
+                {
                     System.out.print("Enter stock quantity: ");
                     int stock = Integer.parseInt(input.nextLine());
                     product.setStock(stock); // Also validates inside setter
@@ -96,7 +108,7 @@ public class InsertProduct
             } 
             catch (Exception e) 
             {
-                System.out.println("⚠️ Failed to close connection: " + e.getMessage());
+                System.out.println("Failed to close connection: " + e.getMessage());
             }
             input.close(); // Close scanner
         }
