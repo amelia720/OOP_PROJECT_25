@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"amelia"},{"l":"amelia.customer"},{"l":"amelia.customer.CLI"},{"l":"amelia.customer.GUI"},{"l":"amelia.invoice"},{"l":"amelia.invoice.GUI"},{"l":"amelia.product"},{"l":"amelia.product.CLI"},{"l":"amelia.product.GUI"}];updateSearchResults();

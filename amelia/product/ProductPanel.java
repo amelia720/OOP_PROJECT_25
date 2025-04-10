@@ -15,7 +15,7 @@ public class ProductPanel extends JPanel
 {
     // Input fields for product data
     protected JTextField nameField = new JTextField();
-    protected JComboBox<String> categoryCombo = new JComboBox<>(Product.getCategoryOptions());
+    protected JComboBox<String> categoryCombo = new JComboBox<>(Product.getCategoryOptions()); // Dropdown for categories
     protected JTextField priceField = new JTextField();
     protected JTextField stockField = new JTextField();
 
@@ -44,7 +44,7 @@ public class ProductPanel extends JPanel
     {
         Product p = new Product();
         p.setName(nameField.getText());
-        p.setCategory((String) categoryCombo.getSelectedItem());
+        p.setCategory((String) categoryCombo.getSelectedItem()); // Get selected category
         p.setPrice(Double.parseDouble(priceField.getText()));
         p.setStock(Integer.parseInt(stockField.getText()));
         return p;
@@ -57,7 +57,7 @@ public class ProductPanel extends JPanel
     public void setProductData(Product p) 
     {
         nameField.setText(p.getName());
-        categoryCombo.setSelectedItem(p.getCategory());
+        categoryCombo.setSelectedItem(p.getCategory()); // Set selected category
         priceField.setText(String.valueOf(p.getPrice()));
         stockField.setText(String.valueOf(p.getStock()));
     }

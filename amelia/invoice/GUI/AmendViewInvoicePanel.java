@@ -281,14 +281,14 @@ public class AmendViewInvoicePanel extends JPanel
 
         try (Connection conn = MyConnection.getConnection()) 
         {
-            InvoiceDAO dao = new InvoiceDAO(conn);
-            boolean deleted = dao.deleteInvoiceItem(selectedInvoiceId, selectedProductId);
+            InvoiceDAO dao = new InvoiceDAO(conn); // DAO to interact with DB
+            boolean deleted = dao.deleteInvoiceItem(selectedInvoiceId, selectedProductId); // Delete item
 
-            if (deleted) 
+            if (deleted) // If deletion was successful
             {
-                messageLabel.setText("Item deleted successfully.");
-                ViewInvoiceTable.loadAll(invoiceModel);
-                loadInvoiceItems(selectedInvoiceId);
+                messageLabel.setText("Item deleted successfully."); // Show success message
+                ViewInvoiceTable.loadAll(invoiceModel); // Reload all invoices
+                loadInvoiceItems(selectedInvoiceId); // Reload items for the selected invoice
             } 
             else 
             {
