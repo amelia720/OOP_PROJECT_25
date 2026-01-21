@@ -37,7 +37,7 @@ public abstract class MyConnection
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Try to connect to the database using the URL, username, and password
-            return DriverManager.getConnection(DATABASE_URL, "root", "W29Nh5TKc");
+            return DriverManager.getConnection(DATABASE_URL, "root", "1234");
         } 
         catch (ClassNotFoundException | SQLException e) 
         {
